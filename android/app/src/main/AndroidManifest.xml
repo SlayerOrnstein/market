@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cephalon.market">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    
    <application
         android:label="Market"
         android:icon="@mipmap/ic_launcher">
