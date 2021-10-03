@@ -10,9 +10,9 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:market/app/app.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:market/app/app_bloc_observer.dart';
+import 'package:market/start_app.dart';
 
 void main() {
   Bloc.observer = AppBlocObserver();
@@ -21,7 +21,7 @@ void main() {
   };
 
   runZonedGuarded(
-    () => runApp(const App()),
+    startApp,
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
 }

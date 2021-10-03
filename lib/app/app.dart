@@ -5,9 +5,11 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+import 'package:bazar_repository/bazar_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:market/counter/counter.dart';
+import 'package:market/bazar/view/bazar_page.dart';
 import 'package:market/l10n/l10n.dart';
 
 class App extends StatelessWidget {
@@ -17,15 +19,20 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        accentColor: const Color(0xFF13B9FF),
-        appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
+        primaryColor: const Color(0xFF344955),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          secondary: const Color(0xFFfaab1a),
+          brightness: Brightness.dark,
+        ),
       ),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const CounterPage(),
+      home: BazarPage(
+        repository: RepositoryProvider.of<BazarRepository>(context),
+      ),
     );
   }
 }

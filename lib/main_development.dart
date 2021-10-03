@@ -5,14 +5,13 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-import 'dart:async';
 import 'dart:developer';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:market/app/app.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:market/app/app_bloc_observer.dart';
+import 'package:market/start_app.dart';
 
 void main() {
   Bloc.observer = AppBlocObserver();
@@ -20,8 +19,5 @@ void main() {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  runZonedGuarded(
-    () => runApp(const App()),
-    (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
-  );
+  startApp();
 }
