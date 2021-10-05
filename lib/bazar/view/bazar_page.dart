@@ -154,21 +154,27 @@ class LargeBazarOrdersView extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
-            child: ListView.builder(
-              controller: ScrollController(),
-              itemCount: buyOrders.length,
-              itemBuilder: (_, index) {
-                return RecentOrderCard(order: buyOrders[index]);
-              },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: ListView.builder(
+                controller: ScrollController(),
+                itemCount: buyOrders.length,
+                itemBuilder: (_, index) {
+                  return RecentOrderCard(order: buyOrders[index]);
+                },
+              ),
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              controller: ScrollController(),
-              itemCount: sellOrders.length,
-              itemBuilder: (_, index) {
-                return RecentOrderCard(order: sellOrders[index]);
-              },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: ListView.builder(
+                controller: ScrollController(),
+                itemCount: sellOrders.length,
+                itemBuilder: (_, index) {
+                  return RecentOrderCard(order: sellOrders[index]);
+                },
+              ),
             ),
           )
         ],
