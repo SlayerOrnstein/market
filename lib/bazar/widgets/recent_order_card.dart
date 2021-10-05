@@ -61,11 +61,10 @@ class _RecentOrderInfo extends StatelessWidget {
           padding: const EdgeInsets.only(left: 8, right: 16),
           child: CachedNetworkImage(
             imageUrl: item.thumbnailUri.toString(),
-            width: getValueForRefinedSize(
+            width: getValueForScreenType(
               context: context,
-              normal: 50,
-              large: 100,
-              extraLarge: 150,
+              mobile: 50,
+              tablet: 60,
             ),
           ),
         ),
