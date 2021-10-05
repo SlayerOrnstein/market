@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:market/bazar/bazar.dart';
 import 'package:market/bazar/widgets/recent_order_card.dart';
 import 'package:market/bazar/widgets/search_bar.dart';
+import 'package:market_client/market_client.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class BazarPage extends StatelessWidget {
   const BazarPage({Key? key, required BazarRepository repository})
@@ -40,56 +42,22 @@ class BazarView extends StatelessWidget {
   }
 }
 
-class BazarOrdersView extends StatefulWidget {
+class BazarOrdersView extends StatelessWidget {
   const BazarOrdersView({Key? key}) : super(key: key);
 
   @override
-  State<BazarOrdersView> createState() => _BazarOrdersViewState();
-}
-
-class _BazarOrdersViewState extends State<BazarOrdersView> {
-  late final _controller = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final fsb = FloatingSearchBar.of(context)!;
-
     return BlocBuilder<BazarOrdersCubit, BazarOrdersState>(
       builder: (context, state) {
         if (state is BazarOrdersLoaded) {
-          return NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              if (notification is UserScrollNotification) {
-                final controller = fsb.widget.controller;
-                final direction = notification.direction;
-
-                if (controller != null) {
-                  if (notification.direction == ScrollDirection.reverse) {
-                    controller.hide();
-                  } else if (direction == ScrollDirection.forward) {
-                    controller.show();
-                  }
-                }
-              }
-
-              return false;
-            },
-            child: ListView.builder(
-              controller: _controller,
-              padding: EdgeInsets.only(
-                top: fsb.widget.height +
-                    (fsb.widget.margins?.vertical ??
-                        MediaQuery.of(context).viewPadding.top),
-              ),
-              itemCount: state.sellOrders.length,
-              itemBuilder: (_, index) {
-                return RecentOrderCard(order: state.sellOrders[index]);
-              },
+          return ScreenTypeLayout.builder(
+            mobile: (_) => MobileBazarOrdersView(
+              sellOrders: state.sellOrders,
+              buyOrders: state.buyOrders,
+            ),
+            tablet: (_) => LargeBazarOrdersView(
+              sellOrders: state.sellOrders,
+              buyOrders: state.buyOrders,
             ),
           );
         }
@@ -98,6 +66,113 @@ class _BazarOrdersViewState extends State<BazarOrdersView> {
           child: CircularProgressIndicator.adaptive(),
         );
       },
+    );
+  }
+}
+
+class MobileBazarOrdersView extends StatefulWidget {
+  const MobileBazarOrdersView({
+    Key? key,
+    required this.sellOrders,
+    required this.buyOrders,
+  }) : super(key: key);
+
+  final List<ItemOrder> sellOrders;
+  final List<ItemOrder> buyOrders;
+
+  @override
+  State<MobileBazarOrdersView> createState() => _MobileBazarOrdersViewState();
+}
+
+class _MobileBazarOrdersViewState extends State<MobileBazarOrdersView> {
+  late final _controller = ScrollController();
+
+  bool _controlleSearchBar(
+    FloatingSearchBarState fsb,
+    ScrollNotification notification,
+  ) {
+    if (notification is UserScrollNotification) {
+      final controller = fsb.widget.controller;
+      final direction = notification.direction;
+
+      if (controller != null) {
+        if (notification.direction == ScrollDirection.reverse) {
+          controller.hide();
+        } else if (direction == ScrollDirection.forward) {
+          controller.show();
+        }
+      }
+    }
+
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final fsb = FloatingSearchBar.of(context)!;
+
+    return NotificationListener<ScrollNotification>(
+      onNotification: (n) => _controlleSearchBar(fsb, n),
+      child: ListView.builder(
+        controller: _controller,
+        padding: EdgeInsets.only(
+          top: fsb.widget.height +
+              (fsb.widget.margins?.vertical ??
+                  MediaQuery.of(context).viewPadding.top),
+        ),
+        itemCount: widget.sellOrders.length,
+        itemBuilder: (_, index) {
+          return RecentOrderCard(order: widget.sellOrders[index]);
+        },
+      ),
+    );
+  }
+}
+
+class LargeBazarOrdersView extends StatelessWidget {
+  const LargeBazarOrdersView({
+    Key? key,
+    required this.sellOrders,
+    required this.buyOrders,
+  }) : super(key: key);
+
+  final List<ItemOrder> sellOrders;
+  final List<ItemOrder> buyOrders;
+
+  @override
+  Widget build(BuildContext context) {
+    final fsb = FloatingSearchBar.of(context)!;
+    final padding = EdgeInsets.only(
+      top: fsb.widget.height +
+          (fsb.widget.margins?.vertical ??
+              MediaQuery.of(context).viewPadding.top),
+    );
+
+    return Padding(
+      padding: padding,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            child: ListView.builder(
+              controller: ScrollController(),
+              itemCount: buyOrders.length,
+              itemBuilder: (_, index) {
+                return RecentOrderCard(order: buyOrders[index]);
+              },
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              controller: ScrollController(),
+              itemCount: sellOrders.length,
+              itemBuilder: (_, index) {
+                return RecentOrderCard(order: sellOrders[index]);
+              },
+            ),
+          )
+        ],
+      ),
     );
   }
 }
