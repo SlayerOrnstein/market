@@ -5,15 +5,15 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+import 'dart:io';
+
 import 'package:bazar_repository/bazar_repository.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:market/app/app.dart';
 import 'package:market/bazar/view/bazar_page.dart';
-import 'package:path_provider/path_provider.dart';
 
 void main() {
   late BazarCache cache;
@@ -22,11 +22,7 @@ void main() {
   setUp(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    if (!kIsWeb) {
-      final tempPath = await getTemporaryDirectory();
-
-      Hive.init(tempPath.path);
-    }
+    Hive.init(Directory.systemTemp.path);
 
     cache = BazarCache(temp: await Hive.openBox<dynamic>('bazar_cache'));
     repository = BazarRepository(cache: cache);
