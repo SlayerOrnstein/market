@@ -39,7 +39,7 @@ class BazarRepository {
     return compute(_searchOrders, req);
   }
 
-  Future<MarketOrders> mostRecentOrders() async {
+  Future<RecentMarketOrders> mostRecentOrders() async {
     const req = MarketClientRequest(
       platform: MarketPlatform.pc,
       language: 'en',
@@ -54,7 +54,8 @@ class BazarRepository {
     return api.searchOrders(req.item!);
   }
 
-  static Future<MarketOrders> _mostRecentorders(MarketClientRequest req) async {
+  static Future<RecentMarketOrders> _mostRecentorders(
+      MarketClientRequest req) async {
     final api = createClient(req.platform, req.language);
 
     return api.mostRecentOrders();

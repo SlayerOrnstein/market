@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:market/bazar/widgets/order_quantity_price.dart';
 import 'package:market/bazar/widgets/order_type_label.dart';
 import 'package:market/bazar/widgets/user_avatar.dart';
@@ -9,10 +10,13 @@ import 'package:responsive_builder/responsive_builder.dart';
 class RecentOrderCard extends StatelessWidget {
   const RecentOrderCard({Key? key, required this.order}) : super(key: key);
 
-  final ItemOrder order;
+  final RecentOrder order;
 
   @override
   Widget build(BuildContext context) {
+    final price = order.platinum.toInt();
+    final orderType = order.orderType;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
@@ -23,15 +27,20 @@ class RecentOrderCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               child: _RecentOrderInfo(
                 item: order.item,
-                orderType: order.orderType,
+                orderType: orderType,
                 quantity: order.quantity,
-                price: order.platinum.toInt(),
+                price: price,
               ),
             ),
             const Divider(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              child: _RecentOrderUserInfo(user: order.user),
+              child: _RecentOrderUserInfo(
+                user: order.user,
+                item: order.item.en.itemName,
+                price: price,
+                orderType: orderType,
+              ),
             )
           ],
         ),
@@ -90,9 +99,27 @@ class _RecentOrderInfo extends StatelessWidget {
 }
 
 class _RecentOrderUserInfo extends StatelessWidget {
-  const _RecentOrderUserInfo({Key? key, required this.user}) : super(key: key);
+  const _RecentOrderUserInfo({
+    Key? key,
+    required this.user,
+    required this.item,
+    required this.price,
+    required this.orderType,
+  }) : super(key: key);
 
   final MarketUser user;
+  final String item;
+  final int price;
+  final OrderType orderType;
+
+  Future<void> _copyMessage() async {
+    final requestType = OrderType.buy == orderType ? 'buy' : 'sell';
+
+    await Clipboard.setData(ClipboardData(
+      text: '/w ${user.ingameName} I want to $requestType: $item for $price '
+          'platinum. (warframe.market)',
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +139,6 @@ class _RecentOrderUserInfo extends StatelessWidget {
         Expanded(
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 8),
@@ -123,6 +149,8 @@ class _RecentOrderUserInfo extends StatelessWidget {
                 ),
               ),
               Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(right: 4, bottom: 2),
@@ -137,6 +165,26 @@ class _RecentOrderUserInfo extends StatelessWidget {
             ],
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: OutlinedButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Not yet Implmented.'),
+                backgroundColor: Colors.white,
+              ));
+            },
+            style: ButtonStyle(
+              side: MaterialStateProperty.all(
+                  const BorderSide(color: Colors.blue)),
+            ),
+            child: const Text('Message'),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: _copyMessage,
+          child: Text(OrderType.buy == orderType ? 'BUY' : 'SELL'),
+        )
       ],
     );
   }

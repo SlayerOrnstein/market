@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:market/bazar/bazar.dart';
+import 'package:market/bazar/cubit/order_cubits.dart';
 import 'package:market/bazar/widgets/recent_order_card.dart';
 import 'package:market/bazar/widgets/search_bar.dart';
 import 'package:market_client/market_client.dart';
@@ -21,7 +22,7 @@ class BazarPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => BazarSearchBloc(_repository)),
-        BlocProvider(create: (_) => BazarOrdersCubit(_repository)),
+        BlocProvider(create: (_) => RecentordersCubit(_repository)),
       ],
       child: const BazarView(),
     );
@@ -47,9 +48,9 @@ class BazarOrdersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BazarOrdersCubit, BazarOrdersState>(
+    return BlocBuilder<RecentordersCubit, RecentordersState>(
       builder: (context, state) {
-        if (state is BazarOrdersLoaded) {
+        if (state is RecentOrdersLoaded) {
           return ScreenTypeLayout.builder(
             mobile: (_) => MobileBazarOrdersView(
               sellOrders: state.sellOrders,
@@ -77,8 +78,8 @@ class MobileBazarOrdersView extends StatefulWidget {
     required this.buyOrders,
   }) : super(key: key);
 
-  final List<ItemOrder> sellOrders;
-  final List<ItemOrder> buyOrders;
+  final List<RecentOrder> sellOrders;
+  final List<RecentOrder> buyOrders;
 
   @override
   State<MobileBazarOrdersView> createState() => _MobileBazarOrdersViewState();
@@ -136,8 +137,8 @@ class LargeBazarOrdersView extends StatelessWidget {
     required this.buyOrders,
   }) : super(key: key);
 
-  final List<ItemOrder> sellOrders;
-  final List<ItemOrder> buyOrders;
+  final List<RecentOrder> sellOrders;
+  final List<RecentOrder> buyOrders;
 
   @override
   Widget build(BuildContext context) {

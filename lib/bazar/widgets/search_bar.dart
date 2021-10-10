@@ -1,8 +1,10 @@
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:market/bazar/bazar.dart';
+import 'package:market/bazar/cubit/order_cubits.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 class BazarSearchBar extends StatefulWidget {
@@ -32,7 +34,7 @@ class _BazarSearchBarState extends State<BazarSearchBar> {
       debounceDelay: const Duration(milliseconds: 500),
       body: widget.body,
       onSubmitted: (query) {
-        BlocProvider.of<BazarOrdersCubit>(context).searchForOrders(query);
+        BlocProvider.of<OrdersearchCubit>(context).searchOrders(query);
       },
       onQueryChanged: (query) {
         BlocProvider.of<BazarSearchBloc>(context).add(SearchItems(query));
@@ -81,24 +83,37 @@ class _ItemResults extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final item = state.items[index];
 
-                  return InkWell(
-                    onTap: () {
-                      BlocProvider.of<BazarOrdersCubit>(context)
-                          .searchForOrders(item.urlName);
+                  return OpenContainer(
+                    openColor: Colors.transparent,
+                    closedColor: Colors.transparent,
+                    openElevation: 0,
+                    closedElevation: 0,
+                    closedBuilder: (_, __) {
+                      return ListTile(
+                        leading: SizedBox(
+                          width: 25,
+                          child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://warframe.market/static/assets/${item.thumb}'),
+                        ),
+                        title: Text(item.itemName),
+                        onTap: () {
+                          BlocProvider.of<OrdersearchCubit>(context)
+                              .searchOrders(item.urlName);
 
-                      if (controller.isOpen) {
-                        controller.close();
-                      }
+                          if (controller.isOpen) {
+                            controller.close();
+                          }
+                        },
+                      );
                     },
-                    child: ListTile(
-                      leading: SizedBox(
-                        width: 25,
-                        child: CachedNetworkImage(
-                            imageUrl:
-                                'https://warframe.market/static/assets/${item.thumb}'),
-                      ),
-                      title: Text(item.itemName),
-                    ),
+                    openBuilder: (_, __) {
+                      return Scaffold(
+                        body: Center(
+                          child: Text(item.itemName),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
