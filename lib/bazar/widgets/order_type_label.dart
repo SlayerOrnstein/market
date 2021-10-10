@@ -11,10 +11,17 @@ class OrderTypeLabel extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      margin: const EdgeInsets.only(top: 16),
-      padding: const EdgeInsets.all(2),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: theme.colorScheme.secondary,
+        color: () {
+          switch (orderType) {
+            case OrderType.sell:
+              return theme.colorScheme.primary;
+            case OrderType.buy:
+              return theme.colorScheme.secondary;
+          }
+        }(),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
@@ -26,8 +33,17 @@ class OrderTypeLabel extends StatelessWidget {
               return 'WTB';
           }
         }(),
-        style: theme.textTheme.caption
-            ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+        style: theme.textTheme.caption?.copyWith(
+          color: () {
+            switch (orderType) {
+              case OrderType.sell:
+                return Colors.white;
+              case OrderType.buy:
+                return Colors.black;
+            }
+          }(),
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

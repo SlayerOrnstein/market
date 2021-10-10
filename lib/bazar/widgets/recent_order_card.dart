@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -112,13 +114,33 @@ class _RecentOrderUserInfo extends StatelessWidget {
   final int price;
   final OrderType orderType;
 
-  Future<void> _copyMessage() async {
+  Future<void> _copyMessage(BuildContext context) async {
+    final theme = Theme.of(context);
+    final snackBarText =
+        theme.textTheme.subtitle1?.copyWith(color: Colors.white);
     final requestType = OrderType.buy == orderType ? 'buy' : 'sell';
 
-    await Clipboard.setData(ClipboardData(
-      text: '/w ${user.ingameName} I want to $requestType: $item for $price '
-          'platinum. (warframe.market)',
-    ));
+    if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+      await Clipboard.setData(ClipboardData(
+        text: '/w ${user.ingameName} I want to $requestType: $item for $price '
+            'platinum. (warframe.market)',
+      ));
+
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Copied to clipboard',
+          style: snackBarText,
+        ),
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Not yet Implmented.',
+          style: snackBarText,
+        ),
+      ));
+    }
   }
 
   @override
@@ -174,15 +196,11 @@ class _RecentOrderUserInfo extends StatelessWidget {
                 backgroundColor: Colors.white,
               ));
             },
-            style: ButtonStyle(
-              side: MaterialStateProperty.all(
-                  const BorderSide(color: Colors.blue)),
-            ),
             child: const Text('Message'),
           ),
         ),
         ElevatedButton(
-          onPressed: _copyMessage,
+          onPressed: () => _copyMessage(context),
           child: Text(OrderType.buy == orderType ? 'BUY' : 'SELL'),
         )
       ],
