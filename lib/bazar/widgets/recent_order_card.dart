@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:market/bazar/widgets/order_quantity_price.dart';
 import 'package:market/bazar/widgets/order_type_label.dart';
 import 'package:market/bazar/widgets/user_avatar.dart';
+import 'package:market/utils/platform_utils.dart';
 import 'package:market_client/market_client.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -120,7 +119,7 @@ class _RecentOrderUserInfo extends StatelessWidget {
         theme.textTheme.subtitle1?.copyWith(color: Colors.white);
     final requestType = OrderType.buy == orderType ? 'buy' : 'sell';
 
-    if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+    if (isDesktop) {
       await Clipboard.setData(ClipboardData(
         text: '/w ${user.ingameName} I want to $requestType: $item for $price '
             'platinum. (warframe.market)',
@@ -159,11 +158,12 @@ class _RecentOrderUserInfo extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: Row(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 8),
+                padding: const EdgeInsets.only(right: 2),
                 child: Text(
                   user.ingameName,
                   style: textTheme.subtitle1
@@ -172,7 +172,6 @@ class _RecentOrderUserInfo extends StatelessWidget {
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(right: 4, bottom: 2),
@@ -187,18 +186,19 @@ class _RecentOrderUserInfo extends StatelessWidget {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: OutlinedButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Not yet Implmented.'),
-                backgroundColor: Colors.white,
-              ));
-            },
-            child: const Text('Message'),
+        if (isDesktop)
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: OutlinedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Not yet Implmented.'),
+                  backgroundColor: Colors.white,
+                ));
+              },
+              child: const Text('Message'),
+            ),
           ),
-        ),
         ElevatedButton(
           onPressed: () => _copyMessage(context),
           child: Text(OrderType.buy == orderType ? 'BUY' : 'SELL'),
