@@ -28,7 +28,7 @@ class _BazarSearchBarState extends State<BazarSearchBar> {
       controller: _controller,
       implicitDuration: const Duration(milliseconds: 250),
       scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
-      margins: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      margins: const EdgeInsets.fromLTRB(12, 28, 12, 8),
       transitionCurve: Curves.easeInOut,
       physics: const BouncingScrollPhysics(),
       debounceDelay: const Duration(milliseconds: 500),
