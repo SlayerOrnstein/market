@@ -1,10 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:market/bazar/bazar.dart';
-import 'package:market/bazar/cubit/order_cubits.dart';
+import 'package:market/bazar/view/bazar_results_page.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 class BazarSearchBar extends StatefulWidget {
@@ -13,7 +12,7 @@ class BazarSearchBar extends StatefulWidget {
   final Widget body;
 
   @override
-  _BazarSearchBarState createState() => _BazarSearchBarState();
+  State<BazarSearchBar> createState() => _BazarSearchBarState();
 }
 
 class _BazarSearchBarState extends State<BazarSearchBar> {
@@ -93,8 +92,9 @@ class _ItemResults extends StatelessWidget {
                         leading: SizedBox(
                           width: 25,
                           child: CachedNetworkImage(
-                              imageUrl:
-                                  'https://warframe.market/static/assets/${item.thumb}'),
+                            imageUrl:
+                                'https://warframe.market/static/assets/${item.thumb}',
+                          ),
                         ),
                         title: Text(item.itemName),
                         onTap: () {
@@ -108,11 +108,7 @@ class _ItemResults extends StatelessWidget {
                       );
                     },
                     openBuilder: (_, __) {
-                      return Scaffold(
-                        body: Center(
-                          child: Text(item.itemName),
-                        ),
-                      );
+                      return const BazarResultsPage();
                     },
                   );
                 },

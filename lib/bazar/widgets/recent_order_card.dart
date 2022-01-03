@@ -92,7 +92,7 @@ class _RecentOrderInfo extends StatelessWidget {
             ),
             OrderTypeLabel(orderType: orderType)
           ],
-        )),
+        ),),
         OrderQuantityPriceWidget(quantity: quantity, price: price)
       ],
     );
@@ -123,7 +123,7 @@ class _RecentOrderUserInfo extends StatelessWidget {
       await Clipboard.setData(ClipboardData(
         text: '/w ${user.ingameName} I want to $requestType: $item for $price '
             'platinum. (warframe.market)',
-      ));
+      ),);
 
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -131,14 +131,14 @@ class _RecentOrderUserInfo extends StatelessWidget {
           'Copied to clipboard',
           style: snackBarText,
         ),
-      ));
+      ),);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           'Not yet Implmented.',
           style: snackBarText,
         ),
-      ));
+      ),);
     }
   }
 
@@ -194,7 +194,7 @@ class _RecentOrderUserInfo extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text('Not yet Implmented.'),
                   backgroundColor: Colors.white,
-                ));
+                ),);
               },
               child: const Text('Message'),
             ),

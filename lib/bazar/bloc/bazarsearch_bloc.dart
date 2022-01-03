@@ -30,10 +30,12 @@ class BazarSearchBloc extends Bloc<BazarSearchEvent, BazarSearchState> {
   }
 
   Future<void> _searchItems(
-      SearchItems event, Emitter<BazarSearchState> emit) async {
-    emit(event.itemName.isEmpty
-        ? const BazarItemEmpty()
-        : const LoadingResults());
+    SearchItems event,
+    Emitter<BazarSearchState> emit,
+  ) async {
+    emit(
+      event.itemName.isEmpty ? const BazarItemEmpty() : const LoadingResults(),
+    );
 
     final items = await _repository.getMarketItems();
 
@@ -41,10 +43,15 @@ class BazarSearchBloc extends Bloc<BazarSearchEvent, BazarSearchState> {
       emit(const BazarItemEmpty());
     } else {
       emit(
-        BazarItemResults(items
-            .where((e) =>
-                e.itemName.toLowerCase().contains(event.itemName.toLowerCase()))
-            .toList()),
+        BazarItemResults(
+          items
+              .where(
+                (e) => e.itemName
+                    .toLowerCase()
+                    .contains(event.itemName.toLowerCase()),
+              )
+              .toList(),
+        ),
       );
     }
   }
