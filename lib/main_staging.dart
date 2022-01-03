@@ -10,18 +10,16 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:market/app/app.dart';
 import 'package:market/app/app_bloc_observer.dart';
+import 'package:market/start_app.dart';
 
 void main() {
-  Bloc.observer = AppBlocObserver();
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
   runZonedGuarded(
-    () => runApp(const App()),
+    () => BlocOverrides.runZoned(startApp, blocObserver: AppBlocObserver()),
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
 }

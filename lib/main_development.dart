@@ -14,10 +14,12 @@ import 'package:market/app/app_bloc_observer.dart';
 import 'package:market/start_app.dart';
 
 void main() {
-  Bloc.observer = AppBlocObserver();
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  startApp();
+  BlocOverrides.runZoned(
+    startApp,
+    blocObserver: AppBlocObserver(),
+  );
 }
