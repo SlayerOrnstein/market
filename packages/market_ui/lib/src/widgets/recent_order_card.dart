@@ -1,12 +1,13 @@
+import 'dart:io';
+
+import 'package:adaptive_breakpoints/adaptive_breakpoints.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:market/bazar/widgets/order_quantity_price.dart';
-import 'package:market/bazar/widgets/order_type_label.dart';
-import 'package:market/bazar/widgets/user_avatar.dart';
-import 'package:market/utils/platform_utils.dart';
 import 'package:market_client/market_client.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:market_ui/src/widgets/order_type_label.dart';
+import 'package:market_ui/src/widgets/price_quantity.dart';
+import 'package:market_ui/src/widgets/user_avatar.dart';
 
 class RecentOrderCard extends StatelessWidget {
   const RecentOrderCard({Key? key, required this.order}) : super(key: key);
@@ -71,29 +72,26 @@ class _RecentOrderInfo extends StatelessWidget {
           padding: const EdgeInsets.only(left: 8, right: 16),
           child: CachedNetworkImage(
             imageUrl: item.thumbnailUri.toString(),
-            width: getValueForScreenType(
-              context: context,
-              mobile: 50,
-              tablet: 60,
-            ),
+            width: 50,
           ),
         ),
         Expanded(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              item.en.itemName,
-              style: Theme.of(context)
-                  .textTheme
-                  .subtitle1
-                  ?.copyWith(fontWeight: FontWeight.w700),
-            ),
-            OrderTypeLabel(orderType: orderType)
-          ],
-        ),),
-        OrderQuantityPriceWidget(quantity: quantity, price: price)
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                item.en.itemName,
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle1
+                    ?.copyWith(fontWeight: FontWeight.w700),
+              ),
+              OrderTypeLabel(orderType: orderType)
+            ],
+          ),
+        ),
+        PriceQuantity(quantity: quantity, price: price)
       ],
     );
   }
@@ -119,32 +117,31 @@ class _RecentOrderUserInfo extends StatelessWidget {
         theme.textTheme.subtitle1?.copyWith(color: Colors.white);
     final requestType = OrderType.buy == orderType ? 'buy' : 'sell';
 
-    if (isDesktop) {
-      await Clipboard.setData(ClipboardData(
-        text: '/w ${user.ingameName} I want to $requestType: $item for $price '
-            'platinum. (warframe.market)',
-      ),);
+    if (Platform.isWindows) {
+      await Clipboard.setData(
+        ClipboardData(
+          text:
+              '/w ${user.ingameName} I want to $requestType: $item for $price '
+              'platinum. (warframe.market)',
+        ),
+      );
 
       // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          'Copied to clipboard',
-          style: snackBarText,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Copied to clipboard',
+            style: snackBarText,
+          ),
         ),
-      ),);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          'Not yet Implmented.',
-          style: snackBarText,
-        ),
-      ),);
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final windowsType = getWindowType(context);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -186,15 +183,19 @@ class _RecentOrderUserInfo extends StatelessWidget {
             ],
           ),
         ),
-        if (isDesktop)
+        if (windowsType == AdaptiveWindowType.medium ||
+            windowsType == AdaptiveWindowType.large ||
+            windowsType == AdaptiveWindowType.xlarge)
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: OutlinedButton(
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Not yet Implmented.'),
-                  backgroundColor: Colors.white,
-                ),);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Not yet Implmented.'),
+                    backgroundColor: Colors.white,
+                  ),
+                );
               },
               child: const Text('Message'),
             ),

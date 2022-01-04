@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:market/bazar/widgets/order_quantity_price.dart';
-import 'package:market/bazar/widgets/order_type_label.dart';
-import 'package:market/bazar/widgets/user_avatar.dart';
 import 'package:market_client/market_client.dart';
+import 'package:market_ui/src/widgets/order_type_label.dart';
+import 'package:market_ui/src/widgets/price_quantity.dart';
+import 'package:market_ui/src/widgets/user_avatar.dart';
 
 class OrderCard extends StatelessWidget {
   const OrderCard({Key? key, required this.order}) : super(key: key);
@@ -39,7 +39,7 @@ class OrderCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8, right: 16),
-              child: OrderQuantityPriceWidget(
+              child: PriceQuantity(
                 quantity: order.quantity,
                 price: order.platinum.toInt(),
               ),

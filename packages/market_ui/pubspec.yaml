@@ -1,0 +1,20 @@
+name: market_ui
+description: A Very Good Project created by Very Good CLI.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.15.0 <3.0.0"
+
+dependencies:
+  adaptive_breakpoints: ^0.1.1
+  cached_network_image: ^3.2.0
+  flutter:
+    sdk: flutter
+  market_client:
+    git: https://github.com/SlayerOrnstein/market_client.git
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^2.4.0

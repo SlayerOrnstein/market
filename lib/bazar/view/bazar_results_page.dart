@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:market/bazar/bazar.dart';
+import 'package:market_ui/market_ui.dart';
 
 class BazarResultsPage extends StatelessWidget {
   const BazarResultsPage({Key? key}) : super(key: key);

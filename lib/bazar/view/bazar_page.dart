@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:market/bazar/bazar.dart';
-import 'package:market/bazar/widgets/recent_order_card.dart';
 import 'package:market/bazar/widgets/search_bar.dart';
 import 'package:market_client/market_client.dart';
+import 'package:market_ui/market_ui.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
