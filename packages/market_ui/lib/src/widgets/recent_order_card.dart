@@ -9,9 +9,16 @@ import 'package:market_ui/src/widgets/order_type_label.dart';
 import 'package:market_ui/src/widgets/price_quantity.dart';
 import 'package:market_ui/src/widgets/user_avatar.dart';
 
+/// {@template recent_order_card}
+// ignore: comment_references
+/// Like [OrderCard] but with a different layout to display the item as the
+/// center of focus and the seller/buyer at the bottom.
+/// {@endtemplate}
 class RecentOrderCard extends StatelessWidget {
+  /// {@macro recent_order_card}
   const RecentOrderCard({Key? key, required this.order}) : super(key: key);
 
+  /// The order itself.
   final RecentOrder order;
 
   @override

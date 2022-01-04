@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:market_client/market_client.dart';
 
+/// {@template order_label}
+/// Widget to display the [OrderType] in a user friendly way.
+/// {@endtemplate}
 class OrderTypeLabel extends StatelessWidget {
+  /// {@macro order_label}
   const OrderTypeLabel({Key? key, required this.orderType}) : super(key: key);
 
+  /// The label itself.
   final OrderType orderType;
 
   @override

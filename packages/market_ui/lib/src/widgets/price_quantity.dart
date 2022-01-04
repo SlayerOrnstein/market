@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
+/// {template price_quantity}
+/// Widget that displays both price and quantity of an item.
+/// {@endtemplate}
 class PriceQuantity extends StatelessWidget {
+  /// {@macro price_quantity}
   const PriceQuantity({Key? key, required this.price, required this.quantity})
       : super(key: key);
 
+  /// Item price.
   final int price;
+
+  /// Item quantity.
   final int quantity;
 
   @override

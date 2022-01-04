@@ -2,7 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:market_client/market_client.dart';
 
+/// {@template user_avatar}
+/// A rounded container to display a user's avatar and online status.
+/// {@endtamplate}
 class UserAvatar extends StatelessWidget {
+  /// {@macro user_avatar}
   const UserAvatar({
     Key? key,
     this.avatar,
@@ -12,8 +16,13 @@ class UserAvatar extends StatelessWidget {
     this.maxRadius,
   }) : super(key: key);
 
+  /// User's avatar image.
   final String? avatar;
+
+  /// User's current online status
   final UserStatus status;
+
+  /// Optional raduis.
   final double? radius, minRadius, maxRadius;
 
   static const _defaultAvater = 'user/default-avatar.png';

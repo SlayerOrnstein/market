@@ -4,9 +4,14 @@ import 'package:market_ui/src/widgets/order_type_label.dart';
 import 'package:market_ui/src/widgets/price_quantity.dart';
 import 'package:market_ui/src/widgets/user_avatar.dart';
 
+/// {@template order_card}
+/// Displays information of an order.
+/// {@endtemplate}
 class OrderCard extends StatelessWidget {
+  /// {@macro order_card}
   const OrderCard({Key? key, required this.order}) : super(key: key);
 
+  /// The order itself..
   final ItemOrder order;
 
   @override

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:market_client/market_client.dart';
 
+/// {@template user_status_label}
+/// Displays the [UserStatus] in a solid color container.
+/// {@endtemplate}
 class UserStatusLabel extends StatelessWidget {
+  /// {@macro user_status_label}
   const UserStatusLabel({Key? key, required this.status}) : super(key: key);
 
+  /// The user status.
   final UserStatus status;
 
   @override
